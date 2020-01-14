@@ -54,6 +54,10 @@ class ChatsList: UITableViewController {
     
     
     @objc func handleReloadData(){
+        self.messages = Array(self.messageDict.values)
+        self.messages.sort { (m1, m2) -> Bool in
+            return m1.timeStamp!.intValue > m2.timeStamp!.intValue
+        }
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
@@ -69,39 +73,48 @@ class ChatsList: UITableViewController {
         
         ref.observe(.childAdded) { (snapshot) in
             
-            let messageId = snapshot.key
-            let messageRef = Database.database().reference().child("messages").child(messageId)
-            
-            messageRef.observe(.value) { (snapshot) in
+            let userId = snapshot.key
+            Database.database().reference().child("user-messages").child(uid).child(userId).observe(.childAdded) { (snapshot) in
                 
                 let messageId = snapshot.key
-                
-                let messageRef = Database.database().reference().child("messages").child(messageId)
-                
-                messageRef.observeSingleEvent(of: .value) { (snapshot) in
-                    if let dictionary = snapshot.value as? [String : AnyObject]{
-                        
-                        let message = Message()
-                        message.fromId = dictionary["fromId"] as? String
-                        message.text = dictionary["text"] as? String
-                        message.timeStamp = dictionary["timeStamp"] as? NSNumber
-                        message.toId = dictionary["toId"] as? String
-                        //self.messages.append(message)
-                        
-                        if let partnerId = message.partenerId(){
-                            self.messageDict[partnerId] = message
-                            self.messages = Array(self.messageDict.values)
-                            self.messages.sort { (m1, m2) -> Bool in
-                                return m1.timeStamp!.intValue > m2.timeStamp!.intValue
-                            }
-                        }
-                        self.timer?.invalidate()
-                        self.timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(self.handleReloadData), userInfo: nil, repeats: false)
-                    }
-                }
-                
+                self.fetchMessage(messageId: messageId)
             }
+            
         }
+    }
+    
+    private func fetchMessage(messageId : String){
+        let messageRef = Database.database().reference().child("messages").child(messageId)
+        
+        messageRef.observe(.value) { (snapshot) in
+            
+            let messageId = snapshot.key
+            
+            let messageRef = Database.database().reference().child("messages").child(messageId)
+            
+            messageRef.observeSingleEvent(of: .value) { (snapshot) in
+                if let dictionary = snapshot.value as? [String : AnyObject]{
+                    
+                    let message = Message()
+                    message.fromId = dictionary["fromId"] as? String
+                    message.text = dictionary["text"] as? String
+                    message.timeStamp = dictionary["timeStamp"] as? NSNumber
+                    message.toId = dictionary["toId"] as? String
+                    //self.messages.append(message)
+                    
+                    if let partnerId = message.partenerId(){
+                        self.messageDict[partnerId] = message
+                    }
+                    self.reload()
+                }
+            }
+            
+        }
+    }
+    
+    private func reload(){
+        self.timer?.invalidate()
+        self.timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(self.handleReloadData), userInfo: nil, repeats: false)
     }
     
     func setupNavbarWithUser(user : User){
