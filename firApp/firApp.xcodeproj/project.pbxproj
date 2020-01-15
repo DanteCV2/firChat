@@ -127,8 +127,8 @@
 				BF11985923BB1F6B00EF2904 /* SignUpViewController.swift */,
 				BF8CE34E23BD92CA00290D8D /* ChatsList.swift */,
 				BF8CE35423BD9B9100290D8D /* ContactsList.swift */,
-				BF8CE35023BD92D800290D8D /* SettingsViewController.swift */,
 				BF8CE36023BEDE6800290D8D /* ChatViewController.swift */,
+				BF8CE35023BD92D800290D8D /* SettingsViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";

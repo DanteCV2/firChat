@@ -37,6 +37,9 @@
                                                                 <rect key="frame" x="0.0" y="0.0" width="223.5" height="34"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                 <textInputTraits key="textInputTraits" keyboardType="emailAddress" textContentType="email"/>
+                                                                <connections>
+                                                                    <outlet property="delegate" destination="BYZ-38-t0r" id="cLi-tt-5gX"/>
+                                                                </connections>
                                                             </textField>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="envelope.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="A1A-Ip-99i">
                                                                 <rect key="frame" x="241.5" y="1.5" width="22.5" height="30.5"/>
@@ -54,6 +57,9 @@
                                                                 <rect key="frame" x="0.0" y="0.0" width="219" height="34"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                 <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
+                                                                <connections>
+                                                                    <outlet property="delegate" destination="BYZ-38-t0r" id="b0I-zL-Z8J"/>
+                                                                </connections>
                                                             </textField>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="eye.slash.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="f6p-PZ-Txf">
                                                                 <rect key="frame" x="237" y="1" width="27" height="31.5"/>
@@ -288,6 +294,7 @@
                         <outlet property="bottomView" destination="AqO-jJ-U3W" id="oUd-Us-oxb"/>
                         <outlet property="cPasswordTextField" destination="WZ6-yy-Vra" id="00h-4v-j1H"/>
                         <outlet property="emailTextField" destination="Wwu-61-ALg" id="Bwa-1C-VkQ"/>
+                        <outlet property="marginTop" destination="hep-vT-fE3" id="xqd-Eo-zHF"/>
                         <outlet property="nameTextField" destination="xmc-rP-HMq" id="tKD-tK-Q77"/>
                         <outlet property="passwordTextField" destination="IZF-Oy-fZE" id="Ybp-6C-Yx5"/>
                         <outlet property="profileImageView" destination="HXt-81-yd9" id="sTd-QB-8Lp"/>

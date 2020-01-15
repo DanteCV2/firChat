@@ -23,7 +23,6 @@ class ChatsList: UITableViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Log Out", style: .plain, target: self, action: #selector(handleLogOut))
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "square.and.pencil"), style: .plain, target: self, action: #selector(handleNewMessage))
         tableView.register(UserCell.self, forCellReuseIdentifier: cellId)
-        //observeMesagges()
         checkIfUserIsLogged()
     }
     
@@ -32,21 +31,24 @@ class ChatsList: UITableViewController {
         if Auth.auth().currentUser?.uid == nil {
             perform(#selector(handleLogOut), with: nil, afterDelay: 0)
         } else {
-            setNavBar()
+            fetchUserAndSetUpNavBarTitle()
         }
     }
     
-    func setNavBar(){
+    //MARK: - View
+    func fetchUserAndSetUpNavBarTitle(){
         
         guard let uid = Auth.auth().currentUser?.uid else {
             return
         }
         
-        Database.database().reference().child("users").child(uid).observeSingleEvent(of: .value) { (snapshot) in
-            
-            if let dictionary = snapshot.value as? [String : AnyObject]{
-                self.navigationItem.title = dictionary["name"] as? String
-                let user = User(dictionary: dictionary)
+        Database.database().reference().child("users").child(uid).observeSingleEvent(of: .value) { (snapshot) in                
+            if let dictionary = snapshot.value as? [String : String]{
+                self.navigationItem.title = dictionary["name"]
+                let user = User()
+                user.name = dictionary["name"]
+                user.profileImageUrl = dictionary["profileImageUrl"]
+                user.email = dictionary["email"]
                 self.setupNavbarWithUser(user: user)
             }
         }
@@ -95,7 +97,7 @@ class ChatsList: UITableViewController {
             messageRef.observeSingleEvent(of: .value) { (snapshot) in
                 if let dictionary = snapshot.value as? [String : AnyObject]{
                     
-                    let message = Message()
+                    let message = Message(dictionary: dictionary)
                     message.fromId = dictionary["fromId"] as? String
                     message.text = dictionary["text"] as? String
                     message.timeStamp = dictionary["timeStamp"] as? NSNumber

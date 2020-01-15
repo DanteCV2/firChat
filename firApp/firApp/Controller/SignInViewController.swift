@@ -37,19 +37,11 @@ class SignInViewController: UIViewController {
         Auth.auth().removeStateDidChangeListener(handle!)
     }
     
-    func setView(){
-        topView.setGrandientBackground()
-        bottomView.layer.cornerRadius = 20.0
-        view.clipsToBounds = true
-        view.setGrandientBackground()
-        signInButton.layer.cornerRadius = 20
-        signInButton.clipsToBounds = true
-        signInButton.setGrandientBackground()
-    }
-    
     @IBAction func signInPressed(_ sender: UIButton) {
         sigIn()
     }
+    
+    //MARK: -Firebase Methods
     
     func sigIn(){
         
@@ -68,5 +60,21 @@ class SignInViewController: UIViewController {
                 self.performSegue(withIdentifier: "fromLogInToChat", sender: nil)
             }
         }
+    }
+    
+    //MARK: -View Configuration
+    
+    func setView(){
+        topView.setGrandientBackground()
+        bottomView.layer.cornerRadius = 20.0
+        view.clipsToBounds = true
+        view.setGrandientBackground()
+        signInButton.layer.cornerRadius = 20
+        signInButton.clipsToBounds = true
+        signInButton.setGrandientBackground()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
 }

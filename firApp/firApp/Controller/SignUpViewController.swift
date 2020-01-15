@@ -19,6 +19,7 @@ class SignUpViewController: UIViewController {
     @IBOutlet var passwordTextField: UITextField!
     @IBOutlet var cPasswordTextField: UITextField!
     @IBOutlet var signUpButton: UIButton!
+    @IBOutlet var marginTop: NSLayoutConstraint!
     
     var chatsVC : ChatsList?
     var activityIndicator : UIActivityIndicatorView = UIActivityIndicatorView()
@@ -55,7 +56,6 @@ class SignUpViewController: UIViewController {
         
         showIndicator()
         Auth.auth().createUser(withEmail: emailTextField.text!, password: passwordTextField.text!) { (user, error) in
-            
             if error !=  nil{
                 self.showAlert(message: "\(error!.localizedDescription)")
                 return
@@ -106,8 +106,12 @@ class SignUpViewController: UIViewController {
                 self.showAlert(message: "\(error!.localizedDescription)")
                 return
             }
+            
             let user = User()
-            user.setValuesForKeys(values)
+            user.id = uid
+            user.name = values["name"]
+            user.email = values["email"]
+            user.profileImageUrl = values["profileImageUrl"]
             self.chatsVC?.setupNavbarWithUser(user: user)
         }
     }
@@ -134,41 +138,46 @@ class SignUpViewController: UIViewController {
         activityIndicator.style = .medium
         view.addSubview(activityIndicator)
         activityIndicator.startAnimating()
-        //UIApplication.shared.beginIgnoringInteractionEvents()
         UIView.setAccessibilityRespondsToUserInteraction(true)
     }
-}
-
-// MARK: -Image Picker Extension
-
-extension SignUpViewController : UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    @objc func profileImageViewTapped(){
+    
         
-        let picker = UIImagePickerController()
-        picker.delegate = self
-        picker.allowsEditing = true
-        present(picker, animated: true, completion: nil)
+        override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+            self.view.endEditing(true)
+        }
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    // MARK: -Image Picker Extension
+    
+    extension SignUpViewController : UIImagePickerControllerDelegate, UINavigationControllerDelegate {
         
-        var selectedImageFromPicker : UIImage?
-        
-        if let editedImage = info[.editedImage]{
-            selectedImageFromPicker = editedImage as? UIImage
-        }else if let originalImage = info[.originalImage]{
-            selectedImageFromPicker = originalImage as? UIImage
+        @objc func profileImageViewTapped(){
+            
+            let picker = UIImagePickerController()
+            picker.delegate = self
+            picker.allowsEditing = true
+            present(picker, animated: true, completion: nil)
         }
         
-        if let selectedImage = selectedImageFromPicker{
-            profileImageView.image = selectedImage
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            
+            var selectedImageFromPicker : UIImage?
+            
+            if let editedImage = info[.editedImage]{
+                selectedImageFromPicker = editedImage as? UIImage
+            }else if let originalImage = info[.originalImage]{
+                selectedImageFromPicker = originalImage as? UIImage
+            }
+            
+            if let selectedImage = selectedImageFromPicker{
+                profileImageView.image = selectedImage
+            }
+            
+            dismiss(animated: true, completion: nil)
         }
         
-        dismiss(animated: true, completion: nil)
-    }
-    
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        dismiss(animated: true, completion: nil)
-    }
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            dismiss(animated: true, completion: nil)
+        }
 }
