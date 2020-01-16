@@ -83,7 +83,7 @@ PODS:
   - GoogleUtilities/UserDefaults (6.3.0):
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (1.2.2)
-  - IQKeyboardManagerSwift (6.4.2)
+  - LBTATools (1.0.8)
   - leveldb-library (1.22)
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
@@ -96,7 +96,7 @@ DEPENDENCIES:
   - Firebase/Auth
   - Firebase/Database
   - Firebase/Storage
-  - IQKeyboardManagerSwift
+  - LBTATools
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -115,7 +115,7 @@ SPEC REPOS:
     - GoogleDataTransportCCTSupport
     - GoogleUtilities
     - GTMSessionFetcher
-    - IQKeyboardManagerSwift
+    - LBTATools
     - leveldb-library
     - nanopb
 
@@ -135,10 +135,10 @@ SPEC CHECKSUMS:
   GoogleDataTransportCCTSupport: 9f352523e8785a71f6754f51eeff09f49ec19268
   GoogleUtilities: 9c2c544202301110b29f7974a82e77fdcf12bf51
   GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
-  IQKeyboardManagerSwift: 79a3ec200dfb41cb66a89b8575417b5378107c5d
+  LBTATools: 913ba0a3fbad250d042368ca2a0f314cdb015de1
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
 
-PODFILE CHECKSUM: 1093a63e4e30c5f0a598e7e1e80ffb3990bf2a15
+PODFILE CHECKSUM: f93138c352751f14f4a2b26407fad19a9dbae30f
 
 COCOAPODS: 1.5.2
