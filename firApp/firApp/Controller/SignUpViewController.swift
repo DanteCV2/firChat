@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class SignUpViewController: UIViewController {
+class SignUpViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet var topView: UIView!
     @IBOutlet var bottomView: UIView!
@@ -141,43 +141,41 @@ class SignUpViewController: UIViewController {
         UIView.setAccessibilityRespondsToUserInteraction(true)
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+}
+
+// MARK: -Image Picker Extension
+
+extension SignUpViewController : UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    @objc func profileImageViewTapped(){
         
-        override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-            self.view.endEditing(true)
-        }
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.allowsEditing = true
+        present(picker, animated: true, completion: nil)
     }
     
-    // MARK: -Image Picker Extension
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        var selectedImageFromPicker : UIImage?
+        
+        if let editedImage = info[.editedImage]{
+            selectedImageFromPicker = editedImage as? UIImage
+        }else if let originalImage = info[.originalImage]{
+            selectedImageFromPicker = originalImage as? UIImage
+        }
+        
+        if let selectedImage = selectedImageFromPicker{
+            profileImageView.image = selectedImage
+        }
+        
+        dismiss(animated: true, completion: nil)
+    }
     
-    extension SignUpViewController : UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-        
-        @objc func profileImageViewTapped(){
-            
-            let picker = UIImagePickerController()
-            picker.delegate = self
-            picker.allowsEditing = true
-            present(picker, animated: true, completion: nil)
-        }
-        
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-            
-            var selectedImageFromPicker : UIImage?
-            
-            if let editedImage = info[.editedImage]{
-                selectedImageFromPicker = editedImage as? UIImage
-            }else if let originalImage = info[.originalImage]{
-                selectedImageFromPicker = originalImage as? UIImage
-            }
-            
-            if let selectedImage = selectedImageFromPicker{
-                profileImageView.image = selectedImage
-            }
-            
-            dismiss(animated: true, completion: nil)
-        }
-        
-        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-            dismiss(animated: true, completion: nil)
-        }
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
 }

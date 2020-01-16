@@ -23,6 +23,7 @@ class ChatsList: UITableViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Log Out", style: .plain, target: self, action: #selector(handleLogOut))
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "square.and.pencil"), style: .plain, target: self, action: #selector(handleNewMessage))
         tableView.register(UserCell.self, forCellReuseIdentifier: cellId)
+        tableView.allowsMultipleSelectionDuringEditing = true
         checkIfUserIsLogged()
     }
     
@@ -82,6 +83,11 @@ class ChatsList: UITableViewController {
                 self.fetchMessage(messageId: messageId)
             }
             
+        }
+        
+        ref.observe(.childRemoved) { (snapshot) in
+            self.messageDict.removeValue(forKey: snapshot.key)
+            self.reload()
         }
     }
     
@@ -191,12 +197,39 @@ class ChatsList: UITableViewController {
         navigationController?.pushViewController(chatVC, animated: true)
     }
     
+    //MARK: -TbaleView
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return messages.count
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 72
+    }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
+        guard let uid = Auth.auth().currentUser?.uid else{
+            return
+        }
+        
+       let message = self.messages[indexPath.row]
+        
+        if let chatPartnerId = message.partenerId(){
+            Database.database().reference().child("user-messages").child(uid).child(chatPartnerId).removeValue { (error, ref) in
+                if error != nil{
+                    self.showAlert(message: error!.localizedDescription)
+                    return
+                }
+                
+                self.messageDict.removeValue(forKey: chatPartnerId)
+                self.reload()
+            }
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

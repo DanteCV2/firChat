@@ -10,6 +10,7 @@ import UIKit
 
 class ChatMessengerCell: UICollectionViewCell {
     
+    var message: Message?
     var chatVC : ChatViewController?
     
     let textView: UITextView = {
