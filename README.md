@@ -1,1 +1,2 @@
-# firChat
+# firChat (Messaging application)
+
