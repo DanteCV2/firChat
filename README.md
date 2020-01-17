@@ -28,7 +28,8 @@ Allowing them to interact through texts and images.
 <br/>
 <h2>Skills used</h2> 
 <ul>
-  <li>Storyboards</li>
+  <li>Storyboards 70%</li>
+  <li>Design by code 30%</li>
   <li>MVC Pattern</li>
   <li>Firebase</li>
   <li>NSCache</li>
